@@ -1,3 +1,4 @@
+// Get the all informations form the server of items and display informations in the presentation page
 fetch("http://localhost:3000/api/products")
   .then((res)=> {
     if (res.ok) {
@@ -20,6 +21,7 @@ fetch("http://localhost:3000/api/products")
   })
   .catch((err)=> {
     const items= document.getElementById("items");
+    // error if the items is not available
     items.innerHTML = `Une erreur est survenue (${err})`;
     
   });

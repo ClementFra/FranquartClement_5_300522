@@ -1,6 +1,10 @@
-const getProducts = () => {
-  const cart = JSON.parse(localStorage.getItem("shoppingCart"));
+//define variables
+let cart = JSON.parse(localStorage.getItem("shoppingCart"));
+const totalQuantityElement = document.getElementById("totalQuantity");
+const totalPriceElement = document.getElementById("totalPrice");
 
+//Product information form Api for the cart items
+const getProducts = () => {
   cart.forEach((product) => {
     fetch(`http://localhost:3000/api/products/${product.id}`)
       .then((res) => {
@@ -22,20 +26,27 @@ const getProducts = () => {
 
 getProducts();
 
+// display details for cart items
 const createItemInCart = (product) => {
-  // new element
+  // element of cart items
   const itemArticle = document.createElement("article");
   const itemDivImg = document.createElement("div");
   const itemImg = document.createElement("img");
   const itemDivContent = document.createElement("div");
   const itemDivContentDesc = document.createElement("div");
+
+  // element of product
   const itemDivContentDescName = document.createElement("h2");
   const itemDivContentDescColor = document.createElement("p");
   const itemDivContentDescPrice = document.createElement("p");
   const itemDivContentSettings = document.createElement("div");
+
+  // element quantity of product
   const itemDivContentSettingsQty = document.createElement("div");
   const itemDivContentSettingsQtyValue = document.createElement("p");
   const itemDivContentSettingsQtyInput = document.createElement("input");
+
+  // element for remove product of cart
   const itemDivContentSettingsDel = document.createElement("div");
   const itemDivContentSettingsDelText = document.createElement("p");
 
@@ -51,6 +62,8 @@ const createItemInCart = (product) => {
   itemDivContentDescColor.innerHTML = product.color;
   itemDivContentDescPrice.innerHTML = `${product.price * product.quantity} €`;
   itemDivContentSettings.classList.add("cart__item__content__settings");
+
+  // change element for quantity of product
   itemDivContentSettingsQty.classList.add(
     "cart__item__content__settings__quantity"
   );
@@ -61,7 +74,11 @@ const createItemInCart = (product) => {
   itemDivContentSettingsQtyInput.min = 1;
   itemDivContentSettingsQtyInput.max = 100;
   itemDivContentSettingsQtyInput.value = product.quantity;
+
+  // update quantity of product
   itemDivContentSettingsQtyInput.addEventListener("change", updateQuantity);
+
+  // change element for remove the product of cart
   itemDivContentSettingsDel.classList.add(
     "cart__item__content__settings__delete"
   );
@@ -72,13 +89,19 @@ const createItemInCart = (product) => {
   itemDivContentDesc.appendChild(itemDivContentDescName);
   itemDivContentDesc.appendChild(itemDivContentDescColor);
   itemDivContentDesc.appendChild(itemDivContentDescPrice);
+
+  // child element for quantity
   itemDivContentSettingsQty.appendChild(itemDivContentSettingsQtyValue);
   itemDivContentSettingsQty.appendChild(itemDivContentSettingsQtyInput);
-  itemDivContentSettingsDel.appendChild(itemDivContentSettingsDelText);
   itemDivContentSettings.appendChild(itemDivContentSettingsQty);
+
+  // child element for remove product of cart
+  itemDivContentSettingsDel.appendChild(itemDivContentSettingsDelText);
   itemDivContentSettings.appendChild(itemDivContentSettingsDel);
   itemDivContent.appendChild(itemDivContentDesc);
   itemDivContent.appendChild(itemDivContentSettings);
+
+  // child element product img
   itemDivImg.appendChild(itemImg);
   itemArticle.appendChild(itemDivImg);
   itemArticle.appendChild(itemDivContent);
@@ -87,7 +110,7 @@ const createItemInCart = (product) => {
   cart.appendChild(itemArticle);
 };
 
-//delete item
+// Remove the shopping cart form the cart page
 shoppingCart = JSON.parse(localStorage.getItem("shoppingCart"));
 const deleteItem = (delButton) => {
   if (window.confirm("Voulez-vous supprimer ce produit ?")) {
@@ -105,17 +128,18 @@ const deleteItem = (delButton) => {
       ),
       1
     );
+
+    // update the shopping cart
     localStorage.setItem("shoppingCart", JSON.stringify(shoppingCart));
     alert("Suppression.");
     updateTotal();
   }
 };
 
-//update quantity of cart
+//update the  quantity of cart
 const updateQuantity = (e) => {
   newQuantity = Number(e.target.value);
   article = e.target.closest(".cart__item");
-  const cart = JSON.parse(localStorage.getItem("shoppingCart"));
   cart.map((product) => {
     if (
       product.id == article.dataset.id &&
@@ -125,20 +149,16 @@ const updateQuantity = (e) => {
       return product;
     }
   });
+
+  // update the shopping cart after the update of quantity
   localStorage.setItem("shoppingCart", JSON.stringify(cart));
   updateTotal();
-
-  //Trouver la ligne dans le panier soit en utilisant les dataset en JS ==> utiliser .map
-  // Mettre à jour le local Storage avec la nouvelel quantité
 };
 
+// Update the total after the update of quantity
 const updateTotal = (product) => {
-  const totalQuantityElement = document.getElementById("totalQuantity");
-  const totalPriceElement = document.getElementById("totalPrice");
-
   let totalQuantity = 0;
   let totalPrice = 0;
-  const cart = JSON.parse(localStorage.getItem("shoppingCart"));
   cart.forEach((product) => {
     fetch(`http://localhost:3000/api/products/${product.id}`)
       .then((res) => {
@@ -153,9 +173,7 @@ const updateTotal = (product) => {
         totalPriceElement.innerHTML = totalPrice;
       })
       .catch(function (err) {
-        /*const products = document.querySelector("item");
-    products.innerHTML = `Une erreur est survenue (${err})`;
-    */
+        alert(`Une erreur est survenue: ${err}`);
       });
   });
 
@@ -163,15 +181,18 @@ const updateTotal = (product) => {
   totalPriceElement.innerHTML = totalPrice;
 };
 updateTotal();
-//define Regex for input
-const nameRegex = new RegExp("^[A-Za-zÀ-ú'-\\s]{2,}$", "g"); //notation littérale général
-const addressRegex = new RegExp("^[\\wÀ-ú'-\\s]{2,}$", "g"); //notation littérale général
-const mailRegex = new RegExp("^[\\w.-]+[@]{1}[\\w.-]+[.]{1}[a-z]{2,10}$", "g"); //notation littérale général
+
+// ** formulaire check and validation ** //
+
+//define Regex for the form
+const nameRegex = new RegExp("^[A-Za-zÀ-ú'-\\s]{2,}$", "g"); 
+const addressRegex = new RegExp("^[\\wÀ-ú'-\\s]{2,}$", "g"); 
+const mailRegex = new RegExp("^[\\w.-]+[@]{1}[\\w.-]+[.]{1}[a-z]{2,10}$", "g"); 
 
 //check the regex match
 const checkRegex = (input, regex, message) => {
   let Regextest = new RegExp(regex).test(input.value);
-  let ErrorMsg = input.nextElementSibling; // élement trouvé dans le livre à voir si cela fonctionne
+  let ErrorMsg = input.nextElementSibling; 
   if (!Regextest) {
     ErrorMsg.innerHTML = message;
     return false;
@@ -181,7 +202,6 @@ const checkRegex = (input, regex, message) => {
   }
 };
 
-
 //value for the form
 const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
@@ -189,6 +209,7 @@ const address = document.getElementById("address");
 const city = document.getElementById("city");
 const email = document.getElementById("email");
 
+// submit for the form
 const orderButton = document.getElementById("order");
 orderButton.addEventListener("click", (e) => {
   e.preventDefault();
@@ -199,20 +220,25 @@ orderButton.addEventListener("click", (e) => {
     checkRegex(city, nameRegex, "saisir une ville valide") &&
     checkRegex(email, mailRegex, "saisir un email valide ")
   ) {
-    sendOrder();
+    OrderSending();
   }
 });
 
-const sendOrder = () => {
+// creation of order with the form information
+const OrderSending = () => {
   let contact = {
-    firstName: orderButton.firstName.value,
-    lastName: orderButton.lastName.value,
-    address: orderButton.address.value,
-    city: orderButton.city.value,
-    email: orderButton.email.value,
+    firstName: firstName.value,
+    lastName: lastName.value,
+    address: address.value,
+    city: city.value,
+    email: email.value,
   };
-  let products = cart.map((shoppingCart) => product._id);
-  let order = { contact, products };
+
+  let productSend = [];
+  cart.forEach((product) =>{
+    productSend.push(product._id);
+  });
+  let order = { contact, productSend };
 
   fetch(`http://localhost:3000/api/products/order`, {
     method: "POST",
@@ -227,12 +253,12 @@ const sendOrder = () => {
         return res.json();
       }
     })
-    .then((product) => {
-      localStorage.clear(); 
-      window.location.href = `./confirmation.html?orderId=${product.orderId}#orderId`;
+    .then((order) => {
+      localStorage.clear();
+      // redirection user to the confirmation page
+      location.href = `./confirmation.html?orderId=${order.orderId}`;
     })
-    .catch((err) => {
+    .catch(function (err) {
       alert(`Une erreur est survenue: ${err}`);
     });
-  }
-  
+};

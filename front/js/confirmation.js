@@ -1,9 +1,14 @@
 // Url of the order
 const urlSearchParams = new URLSearchParams(window.location.search);
-const ElementOrderId = urlSearchParams.get("orderId");
+const elementOrderId = urlSearchParams.get("orderId");
 // number of the order 
- OrderElement = document.getElementById("orderId");
- OrderElement.innerHTML = `${ElementOrderId}`;
+/*if (elementOrderId != null){
+    orderElement = document.getElementById("orderId");
+    windows.location = "../html/index.html"
+}
+*/
+orderElement = document.getElementById("orderId");
+orderElement.innerHTML = `${elementOrderId}`;
  
 
 

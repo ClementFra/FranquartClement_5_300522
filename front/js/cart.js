@@ -4,6 +4,12 @@ let cart = index.getCart();
 const totalQuantityElement = document.getElementById("totalQuantity");
 const totalPriceElement = document.getElementById("totalPrice");
 
+function emptycart() {
+  if ( cart.length === 0){
+    document.getElementsByClassName ("cart")[0].innerHTML = "Le panier est vide "
+  }
+}
+emptycart();
 //Product information form Api for the cart items
 const getProducts = () => {
   cart.forEach((product) => {
@@ -112,35 +118,31 @@ const createItemInCart = (product) => {
 };
 
 // Remove the shopping cart form the cart page
-shoppingCart = JSON.parse(localStorage.getItem("shoppingCart"));
+
 const deleteItem = (delButton) => {
   if (window.confirm("Voulez-vous supprimer ce produit ?")) {
-    const path =
-      delButton.path || (delButton.composedPath && delButton.composedPath());
-    const cartItem = path.find((element) =>
-      element.classList.contains("cart__item")
-    );
+    const cartItem = delButton.target.closest(".cart__item");
     const id = cartItem.dataset.id;
     const color = cartItem.dataset.color;
     cartItem.parentNode.removeChild(cartItem);
-    shoppingCart.splice(
-      shoppingCart.indexOf(
-        shoppingCart.find((item) => item.id === id && item.color === color)
+    cart.splice(
+      cart.indexOf(
+        cart.find((item) => item.id === id && item.color === color)
       ),
       1
     );
 
     // update the shopping cart
-    localStorage.setItem("shoppingCart", JSON.stringify(shoppingCart));
-    alert("Suppression.");
+    localStorage.setItem("shoppingCart", JSON.stringify(cart));
     updateTotal();
+    emptycart();
   }
 };
 
 //update the  quantity of cart
 const updateQuantity = (e) => {
-  newQuantity = Number(e.target.value);
-  article = e.target.closest(".cart__item");
+   const newQuantity = Number(e.target.value);
+   const article = e.target.closest(".cart__item");
   cart.map((product) => {
     if (
       product.id == article.dataset.id &&
@@ -221,12 +223,12 @@ orderButton.addEventListener("click", (e) => {
     checkRegex(city, nameRegex, "Saisir une ville valide") &&
     checkRegex(email, mailRegex, "Saisir un email valide ")
   ) {
-    OrderSending();
+    orderSending();
   }
 });
 
 // creation of order with the form information
-const OrderSending = () => {
+const orderSending = () => {
   let contact = {
     firstName: firstName.value,
     lastName: lastName.value,
@@ -235,11 +237,11 @@ const OrderSending = () => {
     email: email.value,
   };
 
-  let productSend = [];
+  let products = [];
   cart.forEach((product) =>{
-    productSend.push(product._id);
+    products.push(product.id);
   });
-  let order = { contact, productSend };
+  let order = { contact, products };
 
   fetch(`http://localhost:3000/api/products/order`, {
     method: "POST",

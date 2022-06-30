@@ -64,7 +64,7 @@ const addToCart = (product) => {
   const addButton = document.getElementById("addToCart");
   addButton.addEventListener("click", (event) => {
     event.preventDefault();
-    item = {};
+     let item = {};
 
     // Update quantity and information on the page product
     const itemQuantity = document.getElementById("quantity").value;

@@ -1,3 +1,4 @@
+import * as index from "./index.js"
 // Information for the Id of product
 const getIdProduct = () => {
   const searchParams = new URLSearchParams(location.search);
@@ -89,7 +90,7 @@ const addToCart = (product) => {
 
     item.id = product._id;
 
-    const cart = JSON.parse(localStorage.getItem("shoppingCart")) || [];
+    let cart = index.getCart();
 
     const itemInCart = cart.find(
       (inCartItem) =>

@@ -1,5 +1,6 @@
+import * as index from "./index.js"
 //define variables
-let cart = JSON.parse(localStorage.getItem("shoppingCart"));
+let cart = index.getCart();
 const totalQuantityElement = document.getElementById("totalQuantity");
 const totalPriceElement = document.getElementById("totalPrice");
 
@@ -214,11 +215,11 @@ const orderButton = document.getElementById("order");
 orderButton.addEventListener("click", (e) => {
   e.preventDefault();
   if (
-    checkRegex(firstName, nameRegex, "saisir un prenom valide") &&
-    checkRegex(lastName, nameRegex, "saisir un nom valide") &&
-    checkRegex(address, addressRegex, "saisir une adresse valide") &&
-    checkRegex(city, nameRegex, "saisir une ville valide") &&
-    checkRegex(email, mailRegex, "saisir un email valide ")
+    checkRegex(firstName, nameRegex, "Saisir un prenom valide") &&
+    checkRegex(lastName, nameRegex, "Saisir un nom valide") &&
+    checkRegex(address, addressRegex, "Saisir une adresse valide") &&
+    checkRegex(city, nameRegex, "Saisir une ville valide") &&
+    checkRegex(email, mailRegex, "Saisir un email valide ")
   ) {
     OrderSending();
   }
@@ -253,10 +254,10 @@ const OrderSending = () => {
         return res.json();
       }
     })
-    .then((order) => {
+    .then((product) => {
       localStorage.clear();
       // redirection user to the confirmation page
-      location.href = `./confirmation.html?orderId=${order.orderId}`;
+      location.href = `./confirmation.html?orderId=${product.orderId}`;
     })
     .catch(function (err) {
       alert(`Une erreur est survenue: ${err}`);

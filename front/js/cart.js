@@ -194,13 +194,13 @@ const mailRegex = new RegExp("^[\\w.-]+[@]{1}[\\w.-]+[.]{1}[a-z]{2,10}$", "g");
 
 //check the regex match
 const checkRegex = (input, regex, message) => {
-  let Regextest = new RegExp(regex).test(input.value);
-  let ErrorMsg = input.nextElementSibling; 
-  if (!Regextest) {
-    ErrorMsg.innerHTML = message;
+  let regexTest = new RegExp(regex).test(input.value);
+  let errorMsg = input.nextElementSibling; 
+  if (!regexTest) {
+    errorMsg.innerHTML = message;
     return false;
   } else {
-    ErrorMsg.innerHTML = "";
+    errorMsg.innerHTML = "";
     return true;
   }
 };

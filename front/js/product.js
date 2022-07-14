@@ -98,15 +98,6 @@ const addToCart = (product) => {
     );
     if (!itemInCart) {
       cart.push(item);
-    } else {
-      itemInCart.quantity += item.quantity;
-      if (itemInCart.quantity > 100) {
-        // error quantity if the quantity value is too hight
-        alert(
-          "Il est impossible d'acheter plus de 100 exemplaires d'un même article."
-        );
-        return;
-      }
     }
     // update of the shopping cart for the cart page
     localStorage.setItem("shoppingCart", JSON.stringify(cart));

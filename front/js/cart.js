@@ -11,7 +11,7 @@ function emptycart() {
 }
 emptycart();
 //Product information form Api for the cart items
-const getProducts = () => {
+function getProducts(){
   cart.forEach((product) => {
     fetch(`http://localhost:3000/api/products/${product.id}`)
       .then((res) => {
@@ -119,7 +119,7 @@ const createItemInCart = (product) => {
 
 // Remove the shopping cart form the cart page
 
-const deleteItem = (delButton) => {
+function deleteItem(delButton) {
   if (window.confirm("Voulez-vous supprimer ce produit ?")) {
     const cartItem = delButton.target.closest(".cart__item");
     const id = cartItem.dataset.id;
@@ -140,7 +140,7 @@ const deleteItem = (delButton) => {
 };
 
 //update the  quantity of cart
-const updateQuantity = (e) => {
+function updateQuantity(e){
    const newQuantity = Number(e.target.value);
    const article = e.target.closest(".cart__item");
   cart.map((product) => {
@@ -159,7 +159,7 @@ const updateQuantity = (e) => {
 };
 
 // Update the total after the update of quantity
-const updateTotal = (product) => {
+function updateTotal (product){
   let totalQuantity = 0;
   let totalPrice = 0;
   cart.forEach((product) => {
@@ -193,7 +193,7 @@ const addressRegex = new RegExp("^[\\wÀ-ú'-\\s]{2,}$", "g");
 const mailRegex = new RegExp("^[\\w.-]+[@]{1}[\\w.-]+[.]{1}[a-z]{2,10}$", "g"); 
 
 //check the regex match
-const checkRegex = (input, regex, message) => {
+function checkRegex(input, regex, message){
   let regexTest = new RegExp(regex).test(input.value);
   let errorMsg = input.nextElementSibling; 
   if (!regexTest) {

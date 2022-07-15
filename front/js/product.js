@@ -1,13 +1,13 @@
 import * as index from "./index.js"
 // Information for the Id of product
-const getIdProduct = () => {
+function getIdProduct(){
   const searchParams = new URLSearchParams(location.search);
   const itemId = searchParams.get("id");
   return itemId;
 };
 
 // Product information form the Api
-const getProduct = () => {
+function getProduct(){
   fetch(`http://localhost:3000/api/products/${getIdProduct()}`)
     .then((res) => {
       if (res.ok) {
@@ -60,7 +60,7 @@ const displayInfos = (product) => {
 };
 
 // creation of shopping cart
-const addToCart = (product) => {
+function addToCart(product){
   const addButton = document.getElementById("addToCart");
   addButton.addEventListener("click", (event) => {
     event.preventDefault();
@@ -98,6 +98,8 @@ const addToCart = (product) => {
     );
     if (!itemInCart) {
       cart.push(item);
+    } else {
+      itemInCart.quantity += item.quantity; 
     }
     // update of the shopping cart for the cart page
     localStorage.setItem("shoppingCart", JSON.stringify(cart));
